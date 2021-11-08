@@ -60,7 +60,7 @@ class ImagePretraining(nn.Module):
             dim=128,
             depth=15,
             ff_mult=6)
-        backbone_out_size = 16 * 16 * 128
+        backbone_out_size = 128
         rep_size = proj_size
 
         self.rep_layer = nn.Sequential(OrderedDict([
@@ -173,7 +173,7 @@ def train(model, criterion, optimizer, scheduler, loader):
                 avg_loss += loss
                 if iteration % report_iter == 0:
                     avg_loss = avg_loss / report_iter
-                    t_iter.set_postfix(avg_loss=avg_loss.item())
+                    t_iter.set_postfix(avg_loss=avg_loss.detach().cpu().numpy())
                     writer.add_scalar(
                         'Loss/train',
                         avg_loss.detach().cpu().numpy(),
